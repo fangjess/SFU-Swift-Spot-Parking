@@ -29,11 +29,12 @@
   
   <style>
     /* Add some basic styling */
-    body {
-      font-family: 'Times New Roman', Times, serif, sans-serif;
+    main {
+      font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
       background-color: #f9f9f9;
       margin: 0;
-      padding: 0;
+      padding: 8rem;
+      text-align: center;
     }
   
     header {
@@ -42,12 +43,6 @@
       padding: 1rem;
       text-align: center;
     }
-  
-    main {
-      padding: 8rem;
-      text-align: center;
-    }
-
 
     button {
     padding: 0.1rem 1rem;
@@ -80,48 +75,53 @@
   <main>
     <p>{entryfileds}</p>
     <div>
-        <input
-          type="text" 
-          placeholder="License Plate" 
-          bind:value={licensePlate} 
+        <label 
+        for="lot">Parking lot:
+        </label>
+        <select name="lot" id="lot" bind:value={lot} >
+          <option value="north">North Lot</option>
+          <option value="east">East Lot</option>
+          <option value="south">South Lot</option>
+          <option value="west">West Parkade</option>
+        </select>
+        <label 
+        for="start">Start time:
+        </label>
+        <input 
+        type="time" 
+        id="start" 
+        name="start"
+        bind:value={startTime}
         />
-        <input
-        type="text" 
-        placeholder="Lot" 
-        bind:value={lot} 
+        <label 
+        for="start">End time:
+       </label>
+        <input 
+        type="time" 
+        id="end" 
+        name="end"
+        bind:value={endTime}
         />
-        <input
-        type="text" 
-        placeholder="Start Time" 
-        bind:value={startTime} 
-        />
-        <input
-        type="text" 
-        placeholder="End Time" 
-        bind:value={endTime} 
-        />
-        <input
-        type="text" 
-        placeholder="Lot Fullness" 
-        bind:value={lotFullness} 
-        />
-        <input
-        type="text" 
-        placeholder="Parking Type" 
-        bind:value={typeParking} 
-        />
+        <label 
+        for="fullness">Lot fullness:
+       </label>
+        <select name="fullness" id="fullness" bind:value={lotFullness}>
+          <option value="1">1 - Empty</option>
+          <option value="2">2 - Partially Empty</option>
+          <option value="3">3 - Half Full</option>
+          <option value="4">4 - Partially Full</option>
+          <option value="5">5 - Full</option>
+        </select>
 
         <button on:click={handleSubmit}>Submit</button>
     </div>
     
     
-    {#if submittedPlate, submittedLot, submittedstartTime, submittedendTime, submittedlotFullness, submittedtypeParking}
-    <p>Your license plate: {submittedPlate}</p>
+    {#if submittedLot, submittedstartTime, submittedendTime, submittedlotFullness}
     <p>Your lot: {submittedLot}</p>
     <p>Your start time: {submittedstartTime}</p>
     <p>Your end time: {submittedendTime}</p>
     <p>Your lot fullness: {submittedlotFullness}</p>
-    <p>Your type parking: {submittedtypeParking}</p>
     {/if}
     
   </main>
