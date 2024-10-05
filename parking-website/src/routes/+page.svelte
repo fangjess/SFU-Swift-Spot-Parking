@@ -117,11 +117,11 @@
     
     {#if submittedPlate, submittedLot, submittedstartTime, submittedendTime, submittedlotFullness, submittedtypeParking}
     <p>Your license plate: {submittedPlate}</p>
-    <p>Your license plate: {submittedLot}</p>
-    <p>Your license plate: {submittedstartTime}</p>
-    <p>Your license plate: {submittedendTime}</p>
-    <p>Your license plate: {submittedlotFullness}</p>
-    <p>Your license plate: {submittedtypeParking}</p>
+    <p>Your lot: {submittedLot}</p>
+    <p>Your start time: {submittedstartTime}</p>
+    <p>Your end time: {submittedendTime}</p>
+    <p>Your lot fullness: {submittedlotFullness}</p>
+    <p>Your type parking: {submittedtypeParking}</p>
     {/if}
     
   </main>
