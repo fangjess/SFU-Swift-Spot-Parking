@@ -68,7 +68,7 @@
       text-align: center;
       padding: 1rem;
       bottom: 0;
-      width: 90%;
+
     }
   </style>
   
