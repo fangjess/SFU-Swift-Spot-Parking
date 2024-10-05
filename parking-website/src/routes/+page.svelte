@@ -32,6 +32,7 @@
     body {
       font-family: 'Times New Roman', Times, serif, sans-serif;
       background-color: #f9f9f9;
+      background-image: url('img_girl.jpg');
       margin: 0;
       padding: 0;
     }
@@ -68,7 +69,7 @@
       text-align: center;
       padding: 1rem;
       bottom: 0;
-      width: 90%;
+      width: 100%;
     }
   </style>
   
