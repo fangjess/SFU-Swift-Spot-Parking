@@ -14,6 +14,42 @@
     let submittedendTime = "";
     let submittedlotFullness = "";
     let submittedtypeParking = "";
+    let lots = {
+        North: { ratings: [], mode: null },
+        East: { ratings: [], mode: null },
+        West: { ratings: [], mode: null },
+        South: { ratings: [], mode: null}
+    };
+
+    // Function to handle new ratings for the selected lot
+    function submitRating() {
+        lots[submittedLot].ratings.push(submittedlotFullness);
+        calculateMode(submittedLot);
+    }
+
+    // Function to calculate the mode for a specific lot
+    function calculateMode(lot) {
+        const ratings = lots[lot].ratings;
+        if (ratings.length === 0) {
+            lots[lot].mode = null;
+            return;
+        }
+
+        let frequency = {};
+        let maxCount = 0;
+        let mode = null;
+
+        // Calculate frequency and find the mode for the selected lot
+        ratings.forEach((value) => {
+            frequency[value] = (frequency[value] || 0) + 1;
+            if (frequency[value] > maxCount) {
+                maxCount = frequency[value];
+                mode = value;
+            }
+        });
+
+        lots[lot].mode = mode;
+    }
 
     const handleSubmit = () => {
     submittedPlate = licensePlate; // Store the entered license plate
@@ -78,40 +114,45 @@
   </header>
   
   <main>
-    <p>{entryfileds}</p>
     <div>
-        <input
+      <h3>Mode of Lot Fullness</h3>
+      <p>North: {lots.North.mode !== null ? lots.North.mode : 'No data yet'}</p>
+      <p>East: {lots.East.mode !== null ? lots.East.mode : 'No data yet'}</p>
+      <p>West: {lots.West.mode !== null ? lots.West.mode : 'No data yet'}</p>
+      <p>South: {lots.South.mode !== null ? lots.South.mode : 'No data yet'}</p>
+      <p>{entryfileds}</p>
+          <input
+            type="text" 
+            placeholder="License Plate" 
+            bind:value={licensePlate} 
+          />
+          <input
           type="text" 
-          placeholder="License Plate" 
-          bind:value={licensePlate} 
-        />
-        <input
-        type="text" 
-        placeholder="Lot" 
-        bind:value={lot} 
-        />
-        <input
-        type="text" 
-        placeholder="Start Time" 
-        bind:value={startTime} 
-        />
-        <input
-        type="text" 
-        placeholder="End Time" 
-        bind:value={endTime} 
-        />
-        <input
-        type="text" 
-        placeholder="Lot Fullness" 
-        bind:value={lotFullness} 
-        />
-        <input
-        type="text" 
-        placeholder="Parking Type" 
-        bind:value={typeParking} 
-        />
+          placeholder="Lot" 
+          bind:value={lot} 
+          />
+          <input
+          type="text" 
+          placeholder="Start Time" 
+          bind:value={startTime} 
+          />
+          <input
+          type="text" 
+          placeholder="End Time" 
+          bind:value={endTime} 
+          />
+          <input
+          type="text" 
+          placeholder="Lot Fullness" 
+          bind:value={lotFullness} 
+          />
+          <input
+          type="text" 
+          placeholder="Parking Type" 
+          bind:value={typeParking} 
+          />
 
-        <button on:click={handleSubmit}>Submit</button>
+          <button on:click={handleSubmit}>Submit</button>
     </div>
     
     
