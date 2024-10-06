@@ -3,7 +3,7 @@
 
     export let parking: ParkingLot;
 
-    const fullnessToString = ["Empty", "Partially empty", "Hlaf full", "Almost full", "Full"];
+    const fullnessToString = ["Empty", "Partially empty", "Half full", "Almost full", "Full"];
 
     function getParkingStatus(fullness: number[]){
         let maxIndex = 0;

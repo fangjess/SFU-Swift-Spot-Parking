@@ -13,7 +13,7 @@
     import { onMount } from "svelte";
 
     // You can add any reactive data here
-    let title = "SFU Parking Services";
+    let title = "SFU Swift Spot";
     let selectedLotForReporting = "";
     let lotFullness = 0;
 
@@ -38,7 +38,7 @@
         }
 
         if (localStorage.getItem("reminderTime")){
-            reminderTime = parseInt(localStorage.getItem("reminderTime"))
+            reminderTime = parseInt(localStorage.getItem("reminderTime")!)
         }
     });
 
