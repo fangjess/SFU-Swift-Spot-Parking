@@ -47,7 +47,17 @@
                 mode = value;
             }
         });
-
+        if (mode == 1) {
+          mode = "Empty";
+        } else if (mode == 2) {
+          mode = "Partially Empty";
+        } else if (mode == 3) {
+          mode = "Half Full";
+        } else if (mode == 4) {
+          mode = "Partially Full";
+        } else {
+          mode = "Full";
+        }
         lots[lot].mode = mode;
     }
 
@@ -171,6 +181,6 @@
   </main>
   
   <footer>
-    <p>&copy; 2024 Your Name. All rights reserved.</p>
+    <p>&copy; 2024 Jessica Emily Gursimrit Paria. All rights reserved.</p>
   </footer>
   
