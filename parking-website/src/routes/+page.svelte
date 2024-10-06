@@ -14,6 +14,42 @@
     let submittedendTime = "";
     let submittedlotFullness = "";
     let submittedtypeParking = "";
+    let lots = {
+        North: { ratings: [], mode: null },
+        East: { ratings: [], mode: null },
+        West: { ratings: [], mode: null },
+        South: { ratings: [], mode: null}
+    };
+
+    // Function to handle new ratings for the selected lot
+    function submitRating() {
+        lots[submittedLot].ratings.push(submittedlotFullness);
+        calculateMode(submittedLot);
+    }
+
+    // Function to calculate the mode for a specific lot
+    function calculateMode(lot) {
+        const ratings = lots[lot].ratings;
+        if (ratings.length === 0) {
+            lots[lot].mode = null;
+            return;
+        }
+
+        let frequency = {};
+        let maxCount = 0;
+        let mode = null;
+
+        // Calculate frequency and find the mode for the selected lot
+        ratings.forEach((value) => {
+            frequency[value] = (frequency[value] || 0) + 1;
+            if (frequency[value] > maxCount) {
+                maxCount = frequency[value];
+                mode = value;
+            }
+        });
+
+        lots[lot].mode = mode;
+    }
 
     const handleSubmit = () => {
     submittedPlate = licensePlate; // Store the entered license plate
@@ -72,7 +108,13 @@
     <h1>{title}</h1>
   </header>
   
+  
   <main>
+    <h3>Current Lot Fullness</h3>
+      <p>North: {lots.North.mode !== null ? lots.North.mode : 'No data yet'}</p>
+      <p>East: {lots.East.mode !== null ? lots.East.mode : 'No data yet'}</p>
+      <p>West: {lots.West.mode !== null ? lots.West.mode : 'No data yet'}</p>
+      <p>South: {lots.South.mode !== null ? lots.South.mode : 'No data yet'}</p>
     <p>{entryfileds}</p>
     <div>
         <label 
@@ -115,6 +157,7 @@
 
         <button on:click={handleSubmit}>Submit</button>
     </div>
+    
     
     
     {#if submittedLot, submittedstartTime, submittedendTime, submittedlotFullness}
