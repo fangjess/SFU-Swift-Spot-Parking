@@ -29,3 +29,10 @@ Our team has many ideas of where we can take SwiftSpot in the future. Some of ou
 - Ability to purchase permits via SwiftSpot & keeping track of what permits are being used to park by each user.
 
 We hope that you see the potential in SFU SwiftSpot, we're so excited to continue to grow our project and create something everybody can find useful!
+
+## Our Team:
+[Emily](https://github.com/emily-trinh)<br>
+[Gursimrit](https://github.com/gbscodes)<br>
+[Paria](https://github.com/pta43)<br>
+[Jessica](https://github.com/fangjess)<br>
+Special thanks to mentor Ray
