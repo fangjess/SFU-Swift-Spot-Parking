@@ -1,5 +1,7 @@
-<script>
+<script lang="ts">
     import { getAllParking } from "$lib/firebase";
+    import ParkingInfo from "$lib/ParkingInfo.svelte";
+    import { onMount } from "svelte";
 
     // You can add any reactive data here
     let title = "SFU Parking Services";
@@ -22,6 +24,13 @@
         West: { ratings: [], mode: null },
         South: { ratings: [], mode: null },
     };
+
+
+    let parkingLots : ParkingInfo[] = [];
+    onMount(async ()=>{
+       // runs wwhen the page loads
+       parkingLots = await getAllParking()   ;
+    })
 
     // Function to handle new ratings for the selected lot
     function submitRating() {

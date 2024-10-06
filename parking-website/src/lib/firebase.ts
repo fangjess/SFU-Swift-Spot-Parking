@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { collection, getDocs, getFirestore } from "firebase/firestore";
+import type ParkingInfo from "./ParkingInfo.svelte";
 
 
 
@@ -24,9 +25,9 @@ const db = getFirestore(app)
 
 export async function getAllParking(){
     const docs = await getDocs(collection(db, "parkings"));
+    const infos : ParkingInfo[] = [];
     docs.forEach(item=>{
-        console.log(item.data());
-        
+       infos.push(item.data() as ParkingInfo  )
     })
-
+    return infos;
 }
