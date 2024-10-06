@@ -5,4 +5,5 @@ export interface ParkingLot{
     fullness: number[];
     current: number;
     total: number;
+    parkedusers : string[];
 }

@@ -1,152 +1,177 @@
 <script lang="ts">
-    import { getAllParking } from "$lib/firebase";
+    import {
+        addParkingRecord,
+        getAllParking,
+        newAPrkingLot,
+        onParkingLotChange,
+        removeParkingRecord,
+        reportFullness,
+    } from "$lib/firebase";
     import ParkingInfo from "$lib/ParkingInfo.svelte";
     import type { ParkingLot } from "$lib/types";
+    import { initializeApp } from "firebase/app";
     import { onMount } from "svelte";
 
     // You can add any reactive data here
     let title = "SFU Parking Services";
-    let licensePlate = "";
-    let lot = "";
+    let selectedLotForReporting = "";
+    let lotFullness = 0;
+
+    let userName = "Default";
+    let selectedLotForSignup = "";
     let startTime = "";
     let endTime = "";
-    let lotFullness = "";
-    let typeParking = "";
-
-    let submittedLot = "";
-
-    let submittedlotFullness = "";
-
 
     const parkingName = ["North Lot", "East Lot", "South Lot", "West Parkade"];
 
-    let parkingLots : ParkingLot[] = [];
-    onMount(async ()=>{
-       // runs wwhen the page loads
-       parkingLots = await getAllParking()   ;
-    })
-
-    // Function to handle new ratings for the selected lot
-    function submitRating() {
-        lots[submittedLot].ratings.push(submittedlotFullness);
-        calculateMode(submittedLot);
-    }
-
-    // Function to calculate the mode for a specific lot
-    function calculateMode(lot) {
-        const ratings = lots[lot].ratings;
-        if (ratings.length === 0) {
-            lots[lot].mode = null;
-            return;
-        }
-
-        let frequency = {};
-        let maxCount = 0;
-        let mode = null;
-
-        // Calculate frequency and find the mode for the selected lot
-        ratings.forEach((value) => {
-            frequency[value] = (frequency[value] || 0) + 1;
-            if (frequency[value] > maxCount) {
-                maxCount = frequency[value];
-                mode = value;
-            }
+    let parkingLots: ParkingLot[] = [];
+    onMount(async () => {
+        // runs wwhen the page loads
+        onParkingLotChange((newLots) => {
+            parkingLots = newLots;
         });
-        if (mode == 1) {
-            mode = "Empty";
-        } else if (mode == 2) {
-            mode = "Partially Empty";
-        } else if (mode == 3) {
-            mode = "Half Full";
-        } else if (mode == 4) {
-            mode = "Partially Full";
-        } else {
-            mode = "Full";
+
+        // load reminder time if tthere is one
+        if (localStorage.getItem("startTime")){
+            startingTime = new Date( Date.parse(localStorage.getItem("startTime")!))
+            
         }
-        lots[lot].mode = mode;
+
+        if (localStorage.getItem("reminderTime")){
+            reminderTime = parseInt(localStorage.getItem("reminderTime"))
+        }
+    });
+
+    let inputTime = 0;
+    let reminderTime = 0;
+    let startingTime = new Date()
+    function saveReminderTime(){
+        reminderTime = inputTime;
+        startingTime = new Date();
+        //@ts-ignore
+        localStorage.setItem("startTime", startingTime);
+        localStorage.setItem("reminderTime", ""+reminderTime)
     }
-
-    const handleSubmit = () => {
-      
-    
-    };
-
 </script>
-
 
 <header>
     <h1>{title}</h1>
 </header>
 
-<main>
- 
-    <form >
+<main class="hor" style="gap:3rem; justify-content:center">
+    <form
+        on:submit={() => {
+            if (!(selectedLotForReporting && lotFullness)) {
+                return;
+            }
+            reportFullness(selectedLotForReporting, lotFullness);
+        }}
+    >
         <p>Please enter the following fields:</p>
         <label for="lot">Parking lot: </label>
-        <select name="lot" id="lot" bind:value={lot}>
-            <option value="North">North Lot</option>
-            <option value="East">East Lot</option>
-            <option value="South">South Lot</option>
-            <option value="West">West Parkade</option>
+        <select name="lot" id="lot" bind:value={selectedLotForReporting}>
+            <option value="North Lot">North Lot</option>
+            <option value="East Lot">East Lot</option>
+            <option value="South Lot">South Lot</option>
+            <option value="West Parkade">West Parkade</option>
         </select>
-        <label for="start">Start time: </label>
-        <input type="time" id="start" name="start" bind:value={startTime} />
-        <label for="start">End time: </label>
-
-        <input type="time" id="end" name="end" bind:value={endTime} />
 
         <label for="fullness">Lot fullness: </label>
 
-
         <select name="fullness" id="fullness" bind:value={lotFullness}>
-            <option value="1">1 - Empty</option>
-            <option value="2">2 - Partially Empty</option>
-            <option value="3">3 - Half Full</option>
-            <option value="4">4 - Partially Full</option>
-            <option value="5">5 - Full</option>
+            <option value="0">Empty</option>
+            <option value="1">Partially Empty</option>
+            <option value="2">Half Full</option>
+            <option value="3">Almost Full</option>
+            <option value="4">Full</option>
         </select>
-<input type="button" value="Submit">
-
+        <input type="submit" value="Submit" />
     </form>
 
-   
+    <form>
+        Sign in to parking lot
+        <div class="hor">
+            <span>Username</span><input type="text" bind:value={userName} />
+        </div>
+        <div class="hor">
+            <span>Parking Lot:</span>
+            <select name="lot" id="lot" bind:value={selectedLotForSignup}>
+                <option value="North Lot">North Lot</option>
+                <option value="East Lot">East Lot</option>
+                <option value="South Lot">South Lot</option>
+                <option value="West Parkade">West Parkade</option>
+            </select>
+        </div>
+
+        <div class="hor">
+           <span>Reminder:</span> <input type="number" bind:value={inputTime}>
+        </div>
+ 
+
+        <div class="hor" style="gap:1rem">
+            <button on:click={()=>{
+                saveReminderTime()
+                addParkingRecord(selectedLotForSignup, userName)
+            }}>Sign In</button>
+            <button style="background-color: #cc0633;" on:click={()=>{
+                reminderTime = 0;
+                removeParkingRecord(selectedLotForSignup, userName);
+                console.log(startTime);
+            }}>Sign Out</button>
+        </div>
+       {#if reminderTime >0}
+       <p>Reminder: Your parking expires in { Math.round(reminderTime- ((new Date() ).getTime() - startingTime.getTime()) / (3600000))} hours.</p>
+       {/if}
+    </form>
 </main>
 
-{#each parkingLots as parking (parking.name) }
-    <ParkingInfo {parking}></ParkingInfo>
+<div class="hor">
+    
+{#each parkingLots as parking (parking.name)}
+<ParkingInfo {parking}></ParkingInfo>
 {/each}
+
+</div>
+<!-- <button on:click={()=>{
+    parkingName.forEach(item=>newAPrkingLot(item))
+}}>asdsadas</button> -->
 
 <footer>
     <p>&copy; 2024 Jessica Emily Gursimrit Paria. All rights reserved.</p>
 </footer>
 
-
-
 <style>
+    .hor {
+        display: flex;
+        flex-direction: row;
+        gap: 0.5rem;
+
+        justify-content: left;
+    }
 
     form {
-        display:flex;
+        display: flex;
         flex-direction: column;
-        gap:0.25rem;
+        gap: 0.5rem;
 
         max-width: 200px;
     }
     /* Add some basic styling */
     body {
-      font-family: 'Times New Roman', Times, serif, sans-serif;
-      background-color: #f9f9f9;
-      background-image: url('img_girl.jpg');
-      margin: 0;
-      padding: 0;
+        font-family: "Times New Roman", Times, serif, sans-serif;
+        background-color: #f9f9f9;
+        background-image: url("img_girl.jpg");
+        margin: 0;
+        padding: 0;
     }
-  
+
     header {
-      background-color: #CC0633 ;
-      color: white;
-      padding: 1rem;
-      text-align: center;
+        background-color: #cc0633;
+        color: white;
+        padding: 1rem;
+        text-align: center;
     }
-  
+
     main {
         font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
             sans-serif;
@@ -160,8 +185,8 @@
         justify-content: center;
     }
 
-
-    input[type=button] {
+    button,
+    input[type="submit"] {
         padding: 0.1rem 1rem;
         font-size: 1rem;
         background-color: #4caf50;
@@ -171,11 +196,11 @@
         transition: transform 0.4s ease-out;
     }
 
-    input[type=button]:hover {
-        background-color: #45a049;
+    button,
+    input[type="submit"]:hover {
         transform: scale(1.1);
     }
-  
+
     footer {
         background-color: #cc0633;
         color: white;
@@ -184,7 +209,4 @@
         bottom: 0;
         width: 100%;
     }
-  </style>
-  
- 
-  
+</style>

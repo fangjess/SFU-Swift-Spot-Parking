@@ -34,7 +34,8 @@
         font-weight: bold;
     }
     .parkingLot {
-        max-width: 400px;
+        min-width: 200px;
+        max-width: 250px;
         width: fit-content;
         padding: 1rem;
         border: red 2px solid;
