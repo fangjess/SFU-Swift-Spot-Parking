@@ -1,8 +1,4 @@
-<script lang="ts">
-    import { getAllParking } from "$lib/firebase";
-    import ParkingInfo from "$lib/ParkingInfo.svelte";
-    import { onMount } from "svelte";
-
+<script>
     // You can add any reactive data here
     let title = "SFU Parking Services";
     let entryfileds = "Please enter the following fields:";
@@ -18,165 +14,119 @@
     let submittedendTime = "";
     let submittedlotFullness = "";
     let submittedtypeParking = "";
-    let lots = {
-        North: { ratings: [], mode: null },
-        East: { ratings: [], mode: null },
-        West: { ratings: [], mode: null },
-        South: { ratings: [], mode: null },
-    };
-
-
-    let parkingLots : ParkingInfo[] = [];
-    onMount(async ()=>{
-       // runs wwhen the page loads
-       parkingLots = await getAllParking()   ;
-    })
-
-    // Function to handle new ratings for the selected lot
-    function submitRating() {
-        lots[submittedLot].ratings.push(submittedlotFullness);
-        calculateMode(submittedLot);
-    }
-
-    // Function to calculate the mode for a specific lot
-    function calculateMode(lot) {
-        const ratings = lots[lot].ratings;
-        if (ratings.length === 0) {
-            lots[lot].mode = null;
-            return;
-        }
-
-        let frequency = {};
-        let maxCount = 0;
-        let mode = null;
-
-        // Calculate frequency and find the mode for the selected lot
-        ratings.forEach((value) => {
-            frequency[value] = (frequency[value] || 0) + 1;
-            if (frequency[value] > maxCount) {
-                maxCount = frequency[value];
-                mode = value;
-            }
-        });
-        if (mode == 1) {
-            mode = "Empty";
-        } else if (mode == 2) {
-            mode = "Partially Empty";
-        } else if (mode == 3) {
-            mode = "Half Full";
-        } else if (mode == 4) {
-            mode = "Partially Full";
-        } else {
-            mode = "Full";
-        }
-        lots[lot].mode = mode;
-    }
 
     const handleSubmit = () => {
-        submittedPlate = licensePlate; // Store the entered license plate
-        submittedLot = lot;
-        submittedstartTime = startTime;
-        submittedendTime = endTime;
-        submittedlotFullness = lotFullness;
-        submittedtypeParking = typeParking;
-        //alert(`License Plate Submitted: ${submittedPlate, submittedLot}`);
-        submitRating();
+    submittedPlate = licensePlate; // Store the entered license plate
+    submittedLot = lot; 
+    submittedstartTime = startTime;
+    submittedendTime = endTime;
+    submittedlotFullness = lotFullness;
+    submittedtypeParking = typeParking;
+    //alert(`License Plate Submitted: ${submittedPlate, submittedLot}`);
     };
 
-    function test() {
-        getAllParking();
-    }
-</script>
-
-
-<button on:click={()=>{
-    test()
-}}>CLICK ME</button>
-<!-- Structure of the page -->
-<header>
-    <h1>{title}</h1>
-</header>
-
-<main>
-    <h3>Current Lot Fullness</h3>
-    <p>North: {lots.North.mode !== null ? lots.North.mode : "No data yet"}</p>
-    <p>East: {lots.East.mode !== null ? lots.East.mode : "No data yet"}</p>
-    <p>West: {lots.West.mode !== null ? lots.West.mode : "No data yet"}</p>
-    <p>South: {lots.South.mode !== null ? lots.South.mode : "No data yet"}</p>
-    <p>{entryfileds}</p>
-    <div>
-        <label for="lot">Parking lot: </label>
-        <select name="lot" id="lot" bind:value={lot}>
-            <option value="North">North Lot</option>
-            <option value="East">East Lot</option>
-            <option value="South">South Lot</option>
-            <option value="West">West Parkade</option>
-        </select>
-        <label for="start">Start time: </label>
-        <input type="time" id="start" name="start" bind:value={startTime} />
-        <label for="start">End time: </label>
-        <input type="time" id="end" name="end" bind:value={endTime} />
-        <label for="fullness">Lot fullness: </label>
-        <select name="fullness" id="fullness" bind:value={lotFullness}>
-            <option value="1">1 - Empty</option>
-            <option value="2">2 - Partially Empty</option>
-            <option value="3">3 - Half Full</option>
-            <option value="4">4 - Partially Full</option>
-            <option value="5">5 - Full</option>
-        </select>
-
-        <button on:click={handleSubmit}>Submit</button>
-    </div>
-
-    {#if (submittedLot, submittedstartTime, submittedendTime, submittedlotFullness)}
-        <p>Your lot: {submittedLot}</p>
-        <p>Your start time: {submittedstartTime}</p>
-        <p>Your end time: {submittedendTime}</p>
-        <p>Your lot fullness: {submittedlotFullness}</p>
-    {/if}
-</main>
-
-<footer>
-    <p>&copy; 2024 Jessica Emily Gursimrit Paria. All rights reserved.</p>
-</footer>
-
-<style>
+  </script>
+  
+  <style>
     /* Add some basic styling */
+    body {
+      font-family: 'Times New Roman', Times, serif, sans-serif;
+      background-color: #f9f9f9;
+      background-image: url('img_girl.jpg');
+      margin: 0;
+      padding: 0;
+    }
+  
+    header {
+      background-color: #CC0633 ;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+  
     main {
-        font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
-            sans-serif;
-        background-color: #f9f9f9;
-        margin: 0;
-        padding: 8rem;
-        text-align: center;
+      padding: 8rem;
+      text-align: center;
     }
 
-    header {
-        background-color: #cc0633;
-        color: white;
-        padding: 1rem;
-        text-align: center;
-    }
 
     button {
-        padding: 0.1rem 1rem;
-        font-size: 1rem;
-        background-color: #4caf50;
-        color: white;
-        border: none;
-        cursor: pointer;
+    padding: 0.1rem 1rem;
+    font-size: 1rem;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
     }
 
     button:hover {
-        background-color: #45a049;
+    background-color: #45a049;
     }
-
+  
     footer {
-        background-color: #cc0633;
-        color: white;
-        text-align: center;
-        padding: 1rem;
-        bottom: 0;
-        width: 90%;
+      background-color: #CC0633 ;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      bottom: 0;
+      width: 100%;
     }
-</style>
+  </style>
+  
+  <!-- Structure of the page -->
+  <header>
+    <h1>{title}</h1>
+  </header>
+  
+  <main>
+    <p>{entryfileds}</p>
+    <div>
+        <input
+          type="text" 
+          placeholder="License Plate" 
+          bind:value={licensePlate} 
+        />
+        <input
+        type="text" 
+        placeholder="Lot" 
+        bind:value={lot} 
+        />
+        <input
+        type="text" 
+        placeholder="Start Time" 
+        bind:value={startTime} 
+        />
+        <input
+        type="text" 
+        placeholder="End Time" 
+        bind:value={endTime} 
+        />
+        <input
+        type="text" 
+        placeholder="Lot Fullness" 
+        bind:value={lotFullness} 
+        />
+        <input
+        type="text" 
+        placeholder="Parking Type" 
+        bind:value={typeParking} 
+        />
+
+        <button on:click={handleSubmit}>Submit</button>
+    </div>
+    
+    
+    {#if submittedPlate, submittedLot, submittedstartTime, submittedendTime, submittedlotFullness, submittedtypeParking}
+    <p>Your license plate: {submittedPlate}</p>
+    <p>Your lot: {submittedLot}</p>
+    <p>Your start time: {submittedstartTime}</p>
+    <p>Your end time: {submittedendTime}</p>
+    <p>Your lot fullness: {submittedlotFullness}</p>
+    <p>Your type parking: {submittedtypeParking}</p>
+    {/if}
+    
+  </main>
+  
+  <footer>
+    <p>&copy; 2024 Your Name. All rights reserved.</p>
+  </footer>
