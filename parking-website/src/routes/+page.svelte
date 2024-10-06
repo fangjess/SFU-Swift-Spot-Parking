@@ -132,6 +132,21 @@
         max-width: 200px;
     }
     /* Add some basic styling */
+    body {
+      font-family: 'Times New Roman', Times, serif, sans-serif;
+      background-color: #f9f9f9;
+      background-image: url('img_girl.jpg');
+      margin: 0;
+      padding: 0;
+    }
+  
+    header {
+      background-color: #CC0633 ;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+  
     main {
         font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
             sans-serif;
@@ -145,12 +160,6 @@
         justify-content: center;
     }
 
-    header {
-        background-color: #cc0633;
-        color: white;
-        padding: 1rem;
-        text-align: center;
-    }
 
     input[type=button] {
         padding: 0.1rem 1rem;
@@ -166,7 +175,7 @@
         background-color: #45a049;
         transform: scale(1.1);
     }
-
+  
     footer {
         background-color: #cc0633;
         color: white;
@@ -175,4 +184,7 @@
         bottom: 0;
         width: 100%;
     }
-</style>
+  </style>
+  
+ 
+  
