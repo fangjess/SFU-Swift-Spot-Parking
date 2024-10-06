@@ -1,32 +1,26 @@
 <script lang="ts">
     import { getAllParking } from "$lib/firebase";
     import ParkingInfo from "$lib/ParkingInfo.svelte";
+    import type { ParkingLot } from "$lib/types";
     import { onMount } from "svelte";
 
     // You can add any reactive data here
     let title = "SFU Parking Services";
-    let entryfileds = "Please enter the following fields:";
     let licensePlate = "";
     let lot = "";
     let startTime = "";
     let endTime = "";
     let lotFullness = "";
     let typeParking = "";
-    let submittedPlate = "";
+
     let submittedLot = "";
-    let submittedstartTime = "";
-    let submittedendTime = "";
+
     let submittedlotFullness = "";
-    let submittedtypeParking = "";
-    let lots = {
-        North: { ratings: [], mode: null },
-        East: { ratings: [], mode: null },
-        West: { ratings: [], mode: null },
-        South: { ratings: [], mode: null },
-    };
 
 
-    let parkingLots : ParkingInfo[] = [];
+    const parkingName = ["North Lot", "East Lot", "South Lot", "West Parkade"];
+
+    let parkingLots : ParkingLot[] = [];
     onMount(async ()=>{
        // runs wwhen the page loads
        parkingLots = await getAllParking()   ;
@@ -73,38 +67,21 @@
     }
 
     const handleSubmit = () => {
-        submittedPlate = licensePlate; // Store the entered license plate
-        submittedLot = lot;
-        submittedstartTime = startTime;
-        submittedendTime = endTime;
-        submittedlotFullness = lotFullness;
-        submittedtypeParking = typeParking;
-        //alert(`License Plate Submitted: ${submittedPlate, submittedLot}`);
-        submitRating();
+      
+    
     };
 
-    function test() {
-        getAllParking();
-    }
 </script>
 
 
-<button on:click={()=>{
-    test()
-}}>CLICK ME</button>
-<!-- Structure of the page -->
 <header>
     <h1>{title}</h1>
 </header>
 
 <main>
-    <h3>Current Lot Fullness</h3>
-    <p>North: {lots.North.mode !== null ? lots.North.mode : "No data yet"}</p>
-    <p>East: {lots.East.mode !== null ? lots.East.mode : "No data yet"}</p>
-    <p>West: {lots.West.mode !== null ? lots.West.mode : "No data yet"}</p>
-    <p>South: {lots.South.mode !== null ? lots.South.mode : "No data yet"}</p>
-    <p>{entryfileds}</p>
-    <div>
+ 
+    <form >
+        <p>Please enter the following fields:</p>
         <label for="lot">Parking lot: </label>
         <select name="lot" id="lot" bind:value={lot}>
             <option value="North">North Lot</option>
@@ -115,8 +92,12 @@
         <label for="start">Start time: </label>
         <input type="time" id="start" name="start" bind:value={startTime} />
         <label for="start">End time: </label>
+
         <input type="time" id="end" name="end" bind:value={endTime} />
+
         <label for="fullness">Lot fullness: </label>
+
+
         <select name="fullness" id="fullness" bind:value={lotFullness}>
             <option value="1">1 - Empty</option>
             <option value="2">2 - Partially Empty</option>
@@ -124,31 +105,44 @@
             <option value="4">4 - Partially Full</option>
             <option value="5">5 - Full</option>
         </select>
+<input type="button" value="Submit">
 
-        <button on:click={handleSubmit}>Submit</button>
-    </div>
+    </form>
 
-    {#if (submittedLot, submittedstartTime, submittedendTime, submittedlotFullness)}
-        <p>Your lot: {submittedLot}</p>
-        <p>Your start time: {submittedstartTime}</p>
-        <p>Your end time: {submittedendTime}</p>
-        <p>Your lot fullness: {submittedlotFullness}</p>
-    {/if}
+   
 </main>
+
+{#each parkingLots as parking (parking.name) }
+    <ParkingInfo {parking}></ParkingInfo>
+{/each}
 
 <footer>
     <p>&copy; 2024 Jessica Emily Gursimrit Paria. All rights reserved.</p>
 </footer>
 
+
+
 <style>
+
+    form {
+        display:flex;
+        flex-direction: column;
+        gap:0.25rem;
+
+        max-width: 200px;
+    }
     /* Add some basic styling */
     main {
         font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
             sans-serif;
         background-color: #f9f9f9;
         margin: 0;
-        padding: 8rem;
+        padding: 2rem;
         text-align: center;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     header {
@@ -158,17 +152,19 @@
         text-align: center;
     }
 
-    button {
+    input[type=button] {
         padding: 0.1rem 1rem;
         font-size: 1rem;
         background-color: #4caf50;
         color: white;
         border: none;
         cursor: pointer;
+        transition: transform 0.4s ease-out;
     }
 
-    button:hover {
+    input[type=button]:hover {
         background-color: #45a049;
+        transform: scale(1.1);
     }
 
     footer {
@@ -177,6 +173,6 @@
         text-align: center;
         padding: 1rem;
         bottom: 0;
-        width: 90%;
+        width: 100%;
     }
 </style>
