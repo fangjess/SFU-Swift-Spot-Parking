@@ -59,6 +59,7 @@
     submittedlotFullness = lotFullness;
     submittedtypeParking = typeParking;
     //alert(`License Plate Submitted: ${submittedPlate, submittedLot}`);
+    submitRating();
     };
 
   </script>
@@ -121,10 +122,10 @@
         for="lot">Parking lot:
         </label>
         <select name="lot" id="lot" bind:value={lot} >
-          <option value="north">North Lot</option>
-          <option value="east">East Lot</option>
-          <option value="south">South Lot</option>
-          <option value="west">West Parkade</option>
+          <option value="North">North Lot</option>
+          <option value="East">East Lot</option>
+          <option value="South">South Lot</option>
+          <option value="West">West Parkade</option>
         </select>
         <label 
         for="start">Start time:
