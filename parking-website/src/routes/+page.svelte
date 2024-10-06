@@ -59,7 +59,7 @@
 </header>
 
 <main class="hor" style="gap:3rem; justify-content:center">
-    <form
+    <form 
         on:submit={() => {
             if (!(selectedLotForReporting && lotFullness)) {
                 return;
@@ -67,7 +67,7 @@
             reportFullness(selectedLotForReporting, lotFullness);
         }}
     >
-        <p>Please enter the following fields:</p>
+        <p>Please enter lot fullness:</p>
         <label for="lot">Parking lot: </label>
         <select name="lot" id="lot" bind:value={selectedLotForReporting}>
             <option value="North Lot">North Lot</option>
@@ -76,7 +76,7 @@
             <option value="West Parkade">West Parkade</option>
         </select>
 
-        <label for="fullness">Lot fullness: </label>
+        <span>Lot fullness:</span>
 
         <select name="fullness" id="fullness" bind:value={lotFullness}>
             <option value="0">Empty</option>
@@ -91,7 +91,7 @@
     <form>
         Sign in to parking lot
         <div class="hor">
-            <span>Username</span><input type="text" bind:value={userName} />
+            <span>Plate#:</span><input type="text" bind:value={userName} />
         </div>
         <div class="hor">
             <span>Parking Lot:</span>
@@ -146,7 +146,8 @@
         flex-direction: row;
         gap: 0.5rem;
 
-        justify-content: left;
+        align-items: center;
+        justify-content: center;
     }
 
     form {
@@ -179,6 +180,7 @@
         margin: 0;
         padding: 2rem;
         text-align: center;
+        
 
         display: flex;
         align-items: center;
