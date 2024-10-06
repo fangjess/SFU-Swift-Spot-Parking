@@ -26,7 +26,7 @@
     };
 
   </script>
-  
+
   <style>
     /* Add some basic styling */
     body {
@@ -47,7 +47,6 @@
       padding: 8rem;
       text-align: center;
     }
-
 
     button {
     padding: 0.1rem 1rem;
